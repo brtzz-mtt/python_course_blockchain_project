@@ -1,0 +1,22 @@
+body {
+    animation: animate_body_background 1s ease-in infinite alternate;
+    background-attachment: fixed;
+    background-color: black;
+    background-image: url('images/background.png');
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    font-family: 'Lucida Console', monospace, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes animate_body_background {
+    from {
+        background-color: #000;
+    }
+    to {
+        background-color: #111;
+    }
+}
