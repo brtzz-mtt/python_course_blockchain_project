@@ -1,5 +1,7 @@
 import os
 
+DEBUG_MODE = True
+
 BASE_PATH = os.path.dirname(__file__) + '/'
 
 with open(BASE_PATH + 'README.md') as readme_file:
