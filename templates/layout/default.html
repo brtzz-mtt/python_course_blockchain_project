@@ -3,10 +3,10 @@
     {% include 'layout/head.html' %}
     <body>
         <div class="grid height_full">
-            <div class="grid width_20 height_full">
+            <div id="aside" class="grid width_20 height_full">
                 <aside></aside>
             </div>
-            <div class="grid width_80">
+            <div id="main" class="grid width_80">
                 <div class="grid height_7_5">
                     <header>
                         <div class="content">
@@ -14,7 +14,9 @@
                                 <a href="{{ url_for('index') }}">
                                     <img src="{{ url_for('static', filename='images/logo_favicon.png') }}" alt="INDEX" />
                                 </a>
+                                <a href="/readme" style="float:right">README</a>
                                 <a href="/changelog" style="float:right">CHANGELOG</a>
+                                <a href="/documentation" style="float:right">DOCUMENTATION</a>
                                 <span style="float:right">{{ copyright }}</span>
                                 <a href="/license" style="float:right">LICENSE</a>
                             </nav>
@@ -25,7 +27,9 @@
                     <section id="content">
                         {% if self.content() %}
                             <div class="content">
-                                <h1>{{ title }}</h1>
+                                {% if title %}
+                                    <h1>{{ title }}</h1>
+                                {% endif %}
                                 {% block content %}{% endblock %}
                             </div>
                         {% endif %}

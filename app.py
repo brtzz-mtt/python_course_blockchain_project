@@ -23,15 +23,32 @@ def license():
     html = markdown(file.read())
     return render('html.html', BASE_TITLE + " | License", {'html': html})
 
-@app.route('/changelog')
-def changelog():
+@app.route('/readme')
+def readme():
     file = open('README.md', 'r')
     html = markdown(file.read())
+    return render('html.html', None, {'html': html})
+
+@app.route('/changelog')
+def changelog():
+    file = open('log.md', 'r')
+    html = markdown(file.read())
     return render('html.html', BASE_TITLE + " | Changelog", {'html': html})
+
+@app.route('/documentation')
+def documentation():
+    file = open('doc.md', 'r')
+    html = markdown(file.read())
+    return render('html.html', BASE_TITLE + " | Documentation", {'html': html})
+
+@app.route('/report')
+def report():
+    return render('index.html', BASE_TITLE + " | Report") # TBD implement this
 
 @app.errorhandler(404)
 def error_handler_404(error):
     return render('layout/empty.html', BASE_TITLE + " | Error", error), 404
 
 if __name__ == '__main__':
+    pprint(vars(app))
     app.run(debug = DEBUG_MODE)
