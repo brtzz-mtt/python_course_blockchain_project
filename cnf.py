@@ -1,4 +1,5 @@
 import os
+from modules.logger import Logger
 
 DEBUG_MODE = True
 
@@ -12,3 +13,5 @@ with open(BASE_PATH + 'README.md') as readme_file:
     for line in readme_file:
         pass
     COPYRIGHT = line
+
+LOGGER = Logger('./app.log', False)

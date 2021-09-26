@@ -3,11 +3,13 @@ path.append('..\\packages') # TBD check this..
 
 ##############
 
-from flask import Flask, request # TBD check request
+import json
+
+from flask import Flask, request
 from markdown import markdown
 from pprint import pprint # for debug purposes..
 
-from cnf import BASE_TITLE, DEBUG_MODE
+from cnf import BASE_TITLE, DEBUG_MODE, LOGGER
 
 from app_functions import render
 
@@ -48,6 +50,14 @@ def report():
 @app.errorhandler(404)
 def error_handler_404(error):
     return render('layout/empty.html', BASE_TITLE + " | Error", error), 404
+
+@app.route('/test',
+    methods = ['GET', 'POST']
+)
+def test():
+    LOGGER.log_ok("Message Nr. " + str(request.json['payload']))
+    return json.dumps(LOGGER.get_log())
+
 
 if __name__ == '__main__':
     pprint(vars(app))

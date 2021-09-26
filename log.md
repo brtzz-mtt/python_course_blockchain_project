@@ -1,3 +1,9 @@
+0.0.3
+-----
+- added logger component
+- flask test handle for post json requests
+- jQuery base cyclic update script
+
 0.0.2
 -----
 - navigation in header
