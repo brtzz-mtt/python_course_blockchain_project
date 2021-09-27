@@ -19,6 +19,7 @@ div.grid.width_80 {
 
 div.grid.height_full {
     height: 100vh;
+    overflow-y: auto;
 }
 
 div.grid.height_5 {

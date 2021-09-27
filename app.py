@@ -1,17 +1,12 @@
-from sys import path
-path.append('..\\packages') # TBD check this..
-
-##############
-
 import json
 
 from flask import Flask, request
 from markdown import markdown
 from pprint import pprint # for debug purposes..
 
-from cnf import BASE_TITLE, DEBUG_MODE, LOGGER
+from app.cnf import BASE_TITLE, DEBUG_MODE, LOGGER, NODES, PLAYERS
 
-from app_functions import render
+from app.functions import render
 
 app = Flask(__name__)
 
@@ -51,13 +46,40 @@ def report():
 def error_handler_404(error):
     return render('layout/empty.html', BASE_TITLE + " | Error", error), 404
 
-@app.route('/test',
-    methods = ['GET', 'POST']
+@app.route('/log/get'#,
+    #methods = ['GET', 'POST']
 )
-def test():
-    LOGGER.log_ok("Message Nr. " + str(request.json['payload']))
+def log_get():
+    LOGGER.log("flask log_get handle called")
     return json.dumps(LOGGER.get_log())
 
+@app.route('/node/get',
+    defaults = {'id': None}
+)
+@app.route('/node/get/<id>')
+def node_get(id):
+    LOGGER.log("flask node_get handle called")
+    if id in NODES:
+        return NODES[id].get_data()
+    else:
+        data = []
+        for key, value in NODES.items():
+            data.append(value.get_data())
+        return json.dumps(data)
+
+@app.route('/player/get',
+    defaults = {'id': None}
+)
+@app.route('/player/get/<id>')
+def player_get(id):
+    LOGGER.log("flask player_get handle called")
+    if id in PLAYERS.keys():
+        return PLAYERS[id].get_data()
+    else:
+        data = []
+        for key, value in PLAYERS.items():
+            data.append(value.get_data())
+        return json.dumps(data)
 
 if __name__ == '__main__':
     pprint(vars(app))

@@ -28,7 +28,7 @@ body.animated {
     bottom: 0;
     min-height: 100%;
     min-width: 100%;
-    opacity: .1;
+    opacity: .125;
     position: fixed;
     right: 0;
 }
@@ -66,4 +66,23 @@ div.content {
     padding: 8px;
     position: absolute;
     width: calc(100% - 28px);
+}
+
+div.content.relative {
+    opacity: .75;
+    position: relative;
+    transition: .125s;
+}
+
+div.content.relative:hover {
+    opacity: 1;
+}
+
+div.content.relative.npc {
+    font-size: 12px;
+    opacity: .5;
+}
+
+footer > aside > div.content {
+    font-size: 12px;
 }
