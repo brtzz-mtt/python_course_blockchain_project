@@ -1,12 +1,28 @@
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 1024px)
+{
+    body {
+        font-size: 12px;
+    }
 
-    header nav > span {
-        display: none;
+    button {
+        font-size: 12px;
+        opacity: 1;
+        padding: 4px 8px;
     }
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 1023px)
+{
 
+    header nav > span#copyright {
+        /*display: none;*/
+        max-width: 33%;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width: 767px)
+{
     #aside {
         display: none;
     }

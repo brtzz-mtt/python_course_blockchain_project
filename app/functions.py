@@ -1,6 +1,6 @@
 from flask import render_template
 
-from app.cnf import BASE_TITLE, COPYRIGHT, DEBUG_MODE, LOGGER
+from app.configuration import BASE_TITLE, COPYRIGHT, DEBUG_MODE, LOGGER
 
 def decorate(text: str,
     type: str = 'bold'
@@ -22,7 +22,7 @@ def render(template: str = 'index.html',
     args: dict = {},
     debug: bool = DEBUG_MODE
 ) -> str:
-    LOGGER.log("rendering flask template '" + template +"' with title '" + title + "'")
+    LOGGER.log("rendering flask template '" + template +"' with title '" + str(title) + "'")
     return render_template(template,
         title = title,
         args = args,

@@ -1,18 +1,16 @@
-from app.cnf import LOGGER
+from app.configuration import LOGGER
 from app.modules.common import Timestamped
-from app.modules.utility import generate_md5_hash
 
 class Account(Timestamped):
 
     __registry = {}
 
     def __init__(self,
-        id: str = generate_md5_hash()
+        id: str
     ) -> None:
         super().__init__()
         self.__id = id
         self.__tokens = 0 # balance is null at creation
-
         LOGGER.log_ok("created account '" + self.__id + "' at " + self.get_timestamp())
 
     @classmethod
@@ -30,4 +28,10 @@ class Account(Timestamped):
         return self.__id
 
     def get_tokens(self) -> float:
+        return self.__tokens
+
+    def set_tokens(self,
+        amount: float
+    ) -> float:
+        self.__tokens = amount
         return self.__tokens

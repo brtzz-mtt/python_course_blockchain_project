@@ -13,13 +13,29 @@ div.grid.width_20 {
     width: 20%;
 }
 
+div.grid.width_25 {
+    width: 25%;
+}
+
+div.grid.width_30 {
+    width: 30%;
+}
+
+div.grid.width_70 {
+    width: 70%;
+}
+
+div.grid.width_75 {
+    width: 75%;
+}
+
 div.grid.width_80 {
     width: 80%;
 }
 
 div.grid.height_full {
     height: 100vh;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 div.grid.height_5 {

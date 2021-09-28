@@ -9,21 +9,47 @@
         {% endif %}
         <div class="grid height_full">
             <div id="aside" class="grid width_20 height_full">
-                <aside></aside>
+                <aside>
+                    <div class="content">
+                        <h2>
+                            Welcome to {{ title }}!
+                        </h2>
+                        <p>
+                            Press START button on top-right bar in order to begin the simulation (or to restart it after a pause..)
+                        </p>
+                    </div>
+                </aside>
             </div>
             <div id="main" class="grid width_80">
-                <div class="grid height_7_5">
+                <div class="grid width_70 height_7_5">
                     <header>
-                        <div class="content">
+                        <div class="content auto_height">
                             <nav>
                                 <a href="{{ url_for('index') }}">
                                     <img src="{{ url_for('static', filename='images/logo_favicon.png') }}" alt="INDEX" />
                                 </a>
                                 <a href="/readme">README</a>
                                 <a href="/changelog">CHANGELOG</a>
-                                <a href="/documentation">DOCUMENTATION</a>
-                                <span>{{ copyright }}</span>
+                                <!--<a href="/documentation">DOCUMENTATION</a>-->
+                                <span id="copyright">{{ copyright }}</span>
                                 <a href="/license">LICENSE</a>
+                            </nav>
+                        </div>
+                    </header>
+                </div>
+                <div class="grid width_30 height_7_5">
+                    <header>
+                        <div class="content auto_height">
+                            <nav>
+                                <span class="buttons">
+                                    <button id="start">
+                                        START
+                                    </button>
+                                    <button id="pause">
+                                        PAUSE
+                                    </button>
+                                </span>
+                                <span style="text-align:right">&nbsp;Blockchain's length: <span id="blockchain_length">0</span></span>
                             </nav>
                         </div>
                     </header>

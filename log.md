@@ -1,3 +1,9 @@
+0.0.5
+-----
+- added speed and entropy features to player entity (account)
+- process movement routine + borders detection
+- frontend documentation placeholder & control-bar in header
+
 0.0.4
 -----
 - blockchain modules package structure with contract prototype
