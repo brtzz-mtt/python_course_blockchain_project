@@ -1,12 +1,12 @@
-from cnf import * # including os..
-from app import * # see https://docs.pytest.org/en/6.2.x/contents.html too
+from app.configuration import * # including os..
+from main import * # see https://docs.pytest.org/en/6.2.x/contents.html too
 
 def test_cnf():
     assert DEBUG_MODE
     assert isinstance(DEBUG_MODE, (bool, int))
     assert BASE_PATH
     assert isinstance(BASE_PATH, str)
-    assert BASE_PATH == os.path.dirname(__file__) + '/'
+    assert BASE_PATH == os.path.dirname(__file__) + '/app/'
     assert VERSION
     assert isinstance(VERSION, str)
     assert BASE_TITLE
@@ -45,17 +45,32 @@ def test_app():
     except AttributeError:
         pass
 
-    assert 'documentation' in view_functions
-    try:
-        result = documentation() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
-    except AttributeError:
-        pass
+    #assert 'documentation' in view_functions # deprecated
+    #try:
+    #    result = documentation() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+    #except AttributeError:
+    #    pass
+
+    assert 'blockchain_get_length' in view_functions
+    result = blockchain_get_length() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+
+    assert 'log_get' in view_functions
+    result = log_get() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+
+    assert 'node_get' in view_functions
+    result = node_get(None) # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+
+    assert 'player_get' in view_functions
+    result = player_get(None) # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
 
     assert 'report' in view_functions
     try:
         result = report() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
     except AttributeError:
         pass
+
+    assert 'status_get' in view_functions
+    result = status_get() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
 
     assert 'static' in view_functions
     
@@ -65,6 +80,13 @@ def test_app():
         pass
 
 def test_app_functions():
+    assert decorate
+    assert decorate("text") == '\033[1m' + "text" + '\033[0m'
+    assert decorate("text", 'error') ==  '\033[91m' + "text" + '\033[0m'
+    assert decorate("text", 'ok') ==  '\033[92m' + "text" + '\033[0m' 
+    assert decorate("text", 'warn') ==  '\033[93m' + "text" + '\033[0m' 
+    assert decorate("text", 'underline') ==  '\033[4m' + "text" + '\033[0m'
+
     assert render
     try:
         result = render() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context

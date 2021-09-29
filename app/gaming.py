@@ -3,7 +3,7 @@ import random
 from app.simulation import DIRECTIONS, DIRECTION_KEYS, NODES, PLAYERS, STATUS
 
 def process_mining(entropy = 0): # experimental, for DBG
-    return ((entropy + 1) * random.randint(1, 10)) / 1000
+    return 0#((entropy + 1) * random.randint(1, 10)) / 1000 # DBG
 
 def process_movement(
     pos_x,

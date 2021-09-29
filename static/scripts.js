@@ -41,12 +41,24 @@ $(function()
                  + '    <span style="color:' + response[i].color + '">' + response[i].name + '</span>'
                  + '    <span style="float:right">(' + response[i].tokens.toFixed(3) + ' ' + response[i].token_iso + ')</span>'
                  + '    <hr />'
-                 + '    <span style="align-items:center;display:flex;font-size:.5em;justify-content:space-between">'
+                 + '    <span class="player" style="align-items:center;display:flex;font-size:.5em;justify-content:space-between">'
                  + '        <span>Entropy: ' + response[i].entropy + '</span>'
                  + '        <span>|</span>'
-                 + '        <span>Attack: ' + response[i].attack + '</span>'
-                 + '        <span>Defence: ' + response[i].defence + '</span>'
-                 + '        <span>Speed: ' + response[i].speed + '</span>'
+                 + '        <span>Attack: ' + response[i].attack
+                 + '        ' + ((Math.pow(response[i].attack, 2) <= response[i].tokens)
+                                ? '<a href="JavaScript:;" class="power_up">+</a>'
+                                : null)
+                 + '        </span>'
+                 + '        <span>Defence: ' + response[i].defence
+                 + '        ' + ((Math.pow(response[i].attack, 2) <= response[i].tokens)
+                                ? '<a href="JavaScript:;" class="power_up">+</a>'
+                                : null)
+                 + '        </span>'
+                 + '        <span>Speed: ' + response[i].speed
+                 + '        ' + ((Math.pow(response[i].speed, 2) <= response[i].tokens)
+                                ? '<a href="JavaScript:;" class="power_up">+</a>'
+                                : null)
+                 + '        </span>'
                  + '    </span>'
                  + '</div>';
             aside_aside.append(html);
@@ -91,7 +103,7 @@ $(function()
             }
         });
     }
-    ajax_update_header_nav_blockchain_length();
+    ajax_update_header_nav_blockchain_length(); // always at startup (beacause of genesis block)
 
     function update_section_content(response)
     {
@@ -144,7 +156,7 @@ $(function()
             }
         });
     }
-    ajax_update_footer_aside_content();
+    ajax_update_footer_aside_content(); // always at startup (because of init logging)
 
     function bootstrap()
     {
@@ -163,5 +175,7 @@ $(function()
 
     if (window.index) {
         ajax_update_section_content();
+    } else {
+        ajax_update_aside_aside();
     }
 });

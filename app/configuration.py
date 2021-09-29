@@ -1,6 +1,6 @@
 import os
 
-DEBUG_MODE = False
+DEBUG_MODE = True
 
 BASE_PATH = os.path.dirname(__file__) + '/'
 
@@ -23,4 +23,4 @@ BLOCKCHAIN = Blockchain(BASE_TITLE)
 
 from app.modules.contract import Contract
 
-CONTRACT = Contract(BLOCKCHAIN)
+CONTRACT = Contract(BASE_TITLE, BLOCKCHAIN)

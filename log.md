@@ -1,3 +1,9 @@
+0.0.6
+-----
+- created transaction class and first contract prototype
+- power-up controls for players
+- better ajax routine for navigation
+
 0.0.5
 -----
 - added speed and entropy features to player entity (account)
@@ -6,7 +12,7 @@
 
 0.0.4
 -----
-- blockchain modules package structure with contract prototype
+- blockchain modules package structure with block prototype
 - enhanced logger component
 - first prototype of self-populated data-pool
 - flask get handles for nodes/players data

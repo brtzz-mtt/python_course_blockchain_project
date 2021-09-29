@@ -6,7 +6,7 @@ from operator import itemgetter
 from pprint import pprint # for debug purposes..
 
 from app.configuration import BASE_TITLE, BLOCKCHAIN, DEBUG_MODE, LOGGER
-from app.functions import render
+from app.functions import decorate, render
 from app.gaming import update_status
 from app.simulation import NODES, PLAYERS, STATUS # initial conditions, auto-generated # TBD initialization controls
 
@@ -34,11 +34,11 @@ def changelog():
     html = markdown(file.read())
     return render('html.html', BASE_TITLE + " | Changelog", {'html': html})
 
-@app.route('/documentation')
-def documentation():
-    file = open('doc.md', 'r') # TBD
-    html = markdown(file.read())
-    return render('html.html', BASE_TITLE + " | Documentation", {'html': html})
+#@app.route('/documentation') # deprecated
+#def documentation():
+#    file = open('doc.md', 'r')
+#    html = markdown(file.read())
+#    return render('html.html', BASE_TITLE + " | Documentation", {'html': html})
 
 @app.route('/report')
 def report():
@@ -48,9 +48,7 @@ def report():
 def error_handler_404(error):
     return render('layout/empty.html', BASE_TITLE + " | Error", error), 404
 
-@app.route('/log/get'#,
-    #methods = ['GET', 'POST']
-)
+@app.route('/log/get')
 def log_get():
     LOGGER.log("flask log_get handle called")
     return json.dumps(LOGGER.get_log())
@@ -58,13 +56,20 @@ def log_get():
 @app.route('/blockchain/get/length')
 def blockchain_get_length():
     LOGGER.log("flask blockchain_get_length handle called")
-    return json.dumps(BLOCKCHAIN.get_length())
+    return json.dumps(len(BLOCKCHAIN.get_blockchain()))
+
+@app.route('/contract/mine',
+    methods = ['GET', 'POST']
+)
+def contract_mine():
+    LOGGER.log("request to mine from node ''") # TBD
+    return json.dumps() # TBD
 
 @app.route('/node/get',
     defaults = {'id': None}
 )
 @app.route('/node/get/<id>')
-def node_get(id):
+def node_get(id = None):
     LOGGER.log("flask node_get handle called")
     if id in NODES:
         return NODES[id].get_data()
@@ -81,7 +86,7 @@ def node_get(id):
     defaults = {'id': None}
 )
 @app.route('/player/get/<id>')
-def player_get(id):
+def player_get(id = None):
     LOGGER.log("flask player_get handle called")
     if id in PLAYERS.keys():
         return PLAYERS[id].get_data()
