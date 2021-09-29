@@ -97,5 +97,6 @@ for key in PLAYERS:
         'pos_y': random.randint(0, 100 - tokens),
         'dir': random.choice(DIRECTION_KEYS),
         'tokens': tokens,
-        'token_iso': BLOCKCHAIN.get_token_iso()
+        'token_iso': BLOCKCHAIN.get_token_iso(),
+        'auto_behaviour': PLAYERS[key].get_auto_behaviour()
     }

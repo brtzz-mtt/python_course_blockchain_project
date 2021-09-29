@@ -1,3 +1,5 @@
+import random
+
 from app.configuration import BLOCKCHAIN
 from app.modules._blockchain.account import Account
 
@@ -17,6 +19,7 @@ class Player(Account):
         self.__attack = attack
         self.__defence = defence
         self.__speed = speed
+        self.__auto_behaviour = random.choice(('ads', 'asd', 'dsa', 'das', 'sda', 'sad')) # for testing purpose
         super().__init__(self.__name)
 
     def get_data(self) -> object:
@@ -28,11 +31,15 @@ class Player(Account):
             'defence': self.__defence,
             'speed': self.__speed,
             'tokens': self.get_tokens(),
-            'token_iso': BLOCKCHAIN.get_token_iso()
+            'token_iso': BLOCKCHAIN.get_token_iso(),
+            'auto_behaviour': self.__auto_behaviour
         }
     
     def get_attack(self) -> int:
         return self.__attack
+
+    def get_auto_behaviour(self) -> str:
+        return self.__auto_behaviour
 
     def get_color(self) -> str:
         return self.__color
@@ -47,4 +54,19 @@ class Player(Account):
         return self.__name
 
     def get_speed(self) -> int:
+        return self.__speed
+
+    def inc_attack(self) -> int:
+        self.__attack += 1
+        self.__entropy += 1
+        return self.__attack
+
+    def inc_defence(self) -> int:
+        self.__defence += 1
+        self.__entropy += 1
+        return self.__defence
+
+    def inc_speed(self) -> int:
+        self.__speed += 1
+        self.__entropy += 1
         return self.__speed

@@ -38,7 +38,7 @@ $(function()
         aside_aside.empty()
         for (let i in response) {
             html = '<div class="content relative">'
-                 + '    <span style="color:' + response[i].color + '">' + response[i].name + '</span>'
+                 + '    <span style="color:' + response[i].color + '">' + response[i].name + ' (' + response[i].auto_behaviour.toUpperCase() + ')</span>'
                  + '    <span style="float:right">(' + response[i].tokens.toFixed(5) + ' ' + response[i].token_iso + ')</span>'
                  + '    <hr />'
                  + '    <span class="player" style="align-items:center;display:flex;font-size:.5em;justify-content:space-between">'
@@ -47,17 +47,17 @@ $(function()
                  + '        <span>Attack: ' + response[i].attack
                  + '        ' + ((Math.pow(response[i].attack, 2) <= response[i].tokens)
                                 ? '<a href="JavaScript:;" class="power_up">+</a>'
-                                : null)
+                                : '')
                  + '        </span>'
                  + '        <span>Defence: ' + response[i].defence
                  + '        ' + ((Math.pow(response[i].attack, 2) <= response[i].tokens)
                                 ? '<a href="JavaScript:;" class="power_up">+</a>'
-                                : null)
+                                : '')
                  + '        </span>'
                  + '        <span>Speed: ' + response[i].speed
                  + '        ' + ((Math.pow(response[i].speed, 2) <= response[i].tokens)
                                 ? '<a href="JavaScript:;" class="power_up">+</a>'
-                                : null)
+                                : '')
                  + '        </span>'
                  + '    </span>'
                  + '</div>';
@@ -161,10 +161,10 @@ $(function()
     function bootstrap()
     {
         if (running) {
-            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 66);
+            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 50);
             interval_ajax_update_header_nav_blockchain_length = setInterval(ajax_update_header_nav_blockchain_length, delay);
             interval_ajax_update_section_content = setInterval(ajax_update_section_content, delay);
-            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 33);
+            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 25);
         } else {
             clearInterval(interval_ajax_update_aside_aside);
             clearInterval(interval_ajax_update_header_nav_blockchain_length);

@@ -4,7 +4,7 @@ from app.modules.utility import generate_sha256_hash
 
 class Block(Timestamped):
 
-    __hashing_difficulty = 3
+    __hashing_difficulty = 1
 
     def __generate_hash(self) -> str:
         string = "{0} {1} {2} {3} {4}".format(

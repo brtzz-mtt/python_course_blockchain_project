@@ -8,7 +8,7 @@ def process_mining(entropy = 0):
     BLOCKCHAIN.add_transaction(Transaction('dummy_sender_id', 'dummy_receiver_id', {'dummy': "payload"})) # DBG
     if CONTRACT.mine():
         mining_factor = entropy + 1
-        return mining_factor * BLOCKCHAIN.get_mining_reward() + random.randint(0, mining_factor) / 10 # random mining bonus
+        return mining_factor * BLOCKCHAIN.get_mining_reward() + random.randint(0, mining_factor) # random mining bonus
     return 0
 
 def process_movement(
@@ -39,12 +39,77 @@ def process_movement(
     # new direction based on entropy
     if random.randint(0, 100) <= entropy:
         dir = random.choice(DIRECTION_KEYS)
-
     return {
         'pos_x': pos_x,
         'pos_y': pos_y,
         'dir': dir
     }
+
+def process_behaviour(player, behaviour):
+        tokens = player.get_tokens()
+        power_up_attack_cost = player.get_attack() * 2
+        power_up_defence_cost = player.get_defence() * 2
+        power_up_speed_cost = player.get_speed() * 2
+        if behaviour == 'ads':
+            if tokens >= power_up_attack_cost:
+                player.add_tokens(-power_up_attack_cost)
+                player.inc_attack()
+            elif tokens >= power_up_defence_cost:
+                player.add_tokens(-power_up_defence_cost)
+                player.inc_defence()
+            elif tokens >= power_up_speed_cost:
+                player.add_tokens(-power_up_speed_cost)
+                player.inc_speed()
+        elif behaviour == 'asd':
+            if tokens >= power_up_attack_cost:
+                player.add_tokens(-power_up_attack_cost)
+                player.inc_attack()
+            elif tokens >= power_up_speed_cost:
+                player.add_tokens(-power_up_speed_cost)
+                player.inc_speed()
+            elif tokens >= power_up_defence_cost:
+                player.add_tokens(-power_up_defence_cost)
+                player.inc_defence()
+        elif behaviour == 'dsa':
+            if tokens >= power_up_defence_cost:
+                player.add_tokens(-power_up_defence_cost)
+                player.inc_defence()
+            elif tokens >= power_up_speed_cost:
+                player.add_tokens(-power_up_speed_cost)
+                player.inc_speed()
+            elif tokens >= power_up_attack_cost:
+                player.add_tokens(-power_up_attack_cost)
+                player.inc_attack()
+        elif behaviour == 'das':
+            if tokens >= power_up_defence_cost:
+                player.add_tokens(-power_up_defence_cost)
+                player.inc_defence()
+            elif tokens >= power_up_attack_cost:
+                player.add_tokens(-power_up_attack_cost)
+                player.inc_attack()
+            elif tokens >= power_up_speed_cost:
+                player.add_tokens(-power_up_speed_cost)
+                player.inc_speed()
+        elif behaviour == 'sda':
+            if tokens >= power_up_speed_cost:
+                player.add_tokens(-power_up_speed_cost)
+                player.inc_speed()
+            elif tokens >= power_up_defence_cost:
+                player.add_tokens(-power_up_defence_cost)
+                player.inc_defence()
+            elif tokens >= power_up_attack_cost:
+                player.add_tokens(-power_up_attack_cost)
+                player.inc_attack()
+        elif behaviour == 'sad':
+            if tokens >= power_up_speed_cost:
+                player.add_tokens(-power_up_speed_cost)
+                player.inc_speed()
+            elif tokens >= power_up_attack_cost:
+                player.add_tokens(-power_up_attack_cost)
+                player.inc_attack()
+            elif tokens >= power_up_defence_cost:
+                player.add_tokens(-power_up_defence_cost)
+                player.inc_defence()
 
 def update_status():
     global STATUS
@@ -77,3 +142,4 @@ def update_status():
         STATUS[key]['pos_x'] = result['pos_x']
         STATUS[key]['pos_y'] = result['pos_y']
         STATUS[key]['dir'] = result['dir']
+        process_behaviour(PLAYERS[key], STATUS[key]['auto_behaviour'])
