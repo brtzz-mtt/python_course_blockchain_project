@@ -145,6 +145,13 @@ section#content .node {
     position: absolute;
 }
 
+footer:hover {
+    bottom: 0;
+    height: 92.75%;
+    position: fixed;
+    width: 80%;
+}
+
 footer > aside > div.content {
     font-size: 12px;
 }

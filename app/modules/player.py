@@ -6,7 +6,7 @@ class Player(Account):
     def __init__(self,
         name: str,
         color: str = 'white',
-        entropy: int = 1,
+        entropy: int = 3,
         attack: int = 1,
         defence: int = 1,
         speed: int = 1
@@ -21,12 +21,12 @@ class Player(Account):
 
     def get_data(self) -> object:
         return {
-            'name': self.get_name(),
-            'color': self.get_color(),
-            'entropy': self.get_entropy(),
-            'speed': self.get_speed(),
-            'attack': self.get_attack(),
-            'defence': self.get_defence(),
+            'name': self.__name,
+            'color': self.__color,
+            'entropy': self.__entropy,
+            'attack': self.__attack,
+            'defence': self.__defence,
+            'speed': self.__speed,
             'tokens': self.get_tokens(),
             'token_iso': BLOCKCHAIN.get_token_iso()
         }

@@ -13,6 +13,11 @@ class Account(Timestamped):
         self.__tokens = 0 # balance is null at creation
         LOGGER.log_ok("created account '" + self.__id + "' at " + self.get_timestamp())
 
+    def add_tokens(self,
+        amount: float
+    ) -> float:
+        return self.set_tokens(self.__tokens + amount)
+
     @classmethod
     def create(cls, # default instance creator, checks if an accoutn with same id already exists in registry
         id: str

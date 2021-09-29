@@ -7,6 +7,7 @@ class Blockchain(Timestamped):
 
     __blockchain = []
     __pending_transactions = []
+    __mining_reward = 0.00123
 
     def __init__(self,
         id: str
@@ -33,7 +34,8 @@ class Blockchain(Timestamped):
             return False
         else:
             self.__blockchain.append(block)
-            LOGGER.log_ok("a new block with hash '" + block.get_hash() + "' and '" + str(len(block.get_transactions())) + "' transactions was added to the blockchain at index '" + str(block.get_index()) + "'")
+            LOGGER.log_ok("a new block with hash '" + block.get_hash() + "' and " + str(len(block.get_transactions())) + " transaction(s) was added to the blockchain at index " + str(block.get_index()))
+            self.__pending_transactions = []
             return True
 
     def get_blockchain(self) -> list:
@@ -44,6 +46,9 @@ class Blockchain(Timestamped):
 
     def get_last_block(self) -> Block:
         return self.__blockchain[-1]
+
+    def get_mining_reward(self) -> float:
+        return self.__mining_reward
 
     def get_pending_transactions(self) -> list:
         return self.__pending_transactions

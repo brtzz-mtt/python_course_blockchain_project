@@ -39,7 +39,7 @@ $(function()
         for (let i in response) {
             html = '<div class="content relative">'
                  + '    <span style="color:' + response[i].color + '">' + response[i].name + '</span>'
-                 + '    <span style="float:right">(' + response[i].tokens.toFixed(3) + ' ' + response[i].token_iso + ')</span>'
+                 + '    <span style="float:right">(' + response[i].tokens.toFixed(5) + ' ' + response[i].token_iso + ')</span>'
                  + '    <hr />'
                  + '    <span class="player" style="align-items:center;display:flex;font-size:.5em;justify-content:space-between">'
                  + '        <span>Entropy: ' + response[i].entropy + '</span>'
@@ -71,7 +71,7 @@ $(function()
                 for (let i in response) {
                     html = '<div class="content relative npc">'
                          + '    ' + response[i].id
-                         + '    <span style="float:right">(' + response[i].tokens.toFixed(3) + ' ' + response[i].token_iso + ')</span>'
+                         + '    <span style="float:right">(' + response[i].tokens.toFixed(5) + ' ' + response[i].token_iso + ')</span>'
                          + '</div>';
                     aside_aside.append(html);
                 }
@@ -161,10 +161,10 @@ $(function()
     function bootstrap()
     {
         if (running) {
-            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 100);
+            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 66);
             interval_ajax_update_header_nav_blockchain_length = setInterval(ajax_update_header_nav_blockchain_length, delay);
             interval_ajax_update_section_content = setInterval(ajax_update_section_content, delay);
-            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 10);
+            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 33);
         } else {
             clearInterval(interval_ajax_update_aside_aside);
             clearInterval(interval_ajax_update_header_nav_blockchain_length);

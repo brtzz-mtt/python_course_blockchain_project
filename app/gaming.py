@@ -1,9 +1,15 @@
 import random
 
+from app.configuration import BLOCKCHAIN, CONTRACT
 from app.simulation import DIRECTIONS, DIRECTION_KEYS, NODES, PLAYERS, STATUS
+from app.modules._blockchain.transaction import Transaction
 
-def process_mining(entropy = 0): # experimental, for DBG
-    return 0#((entropy + 1) * random.randint(1, 10)) / 1000 # DBG
+def process_mining(entropy = 0):
+    BLOCKCHAIN.add_transaction(Transaction('dummy_sender_id', 'dummy_receiver_id', {'dummy': "payload"})) # DBG
+    if CONTRACT.mine():
+        mining_factor = entropy + 1
+        return mining_factor * BLOCKCHAIN.get_mining_reward() + random.randint(0, mining_factor) / 10 # random mining bonus
+    return 0
 
 def process_movement(
     pos_x,
@@ -42,25 +48,32 @@ def process_movement(
 
 def update_status():
     global STATUS
+    miner = random.choice(list(NODES.keys()) + list(PLAYERS.keys())) # simulates mining conditions, quite superficially
+    #if not len(BLOCKCHAIN.get_blockchain()) % 10 and len(NODES): # ups.. c'ést la vie!
+    #    random_node = random.choice(list(NODES.keys()))
+    #    del NODES[random_node]
+    #    del STATUS[random_node]
     for key in NODES:
-        tokens = NODES[key].get_account().set_tokens(NODES[key].get_account().get_tokens() + process_mining())
-        STATUS[key]['tokens'] = tokens
-        result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], tokens)
+        if key == miner:
+            tokens = NODES[key].get_account().add_tokens(process_mining())
+            STATUS[key]['tokens'] = tokens
+        result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], STATUS[key]['tokens'])
         STATUS[key]['pos_x'] = result['pos_x']
         STATUS[key]['pos_y'] = result['pos_y']
         STATUS[key]['dir'] = result['dir']
     for key in PLAYERS:
         entropy = PLAYERS[key].get_entropy()
         STATUS[key]['entropy'] = entropy
-        tokens = PLAYERS[key].set_tokens(PLAYERS[key].get_tokens() + process_mining(entropy))
-        STATUS[key]['tokens'] = tokens
+        if key == miner:
+            tokens = PLAYERS[key].add_tokens(process_mining(entropy))
+            STATUS[key]['tokens'] = tokens
         attack = PLAYERS[key].get_attack()
         STATUS[key]['attack'] = attack
         defence = PLAYERS[key].get_defence()
         STATUS[key]['defence'] = defence
         speed = PLAYERS[key].get_speed()
         STATUS[key]['speed'] = speed
-        result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], tokens, entropy, speed)
+        result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], STATUS[key]['tokens'], entropy, speed)
         STATUS[key]['pos_x'] = result['pos_x']
         STATUS[key]['pos_y'] = result['pos_y']
         STATUS[key]['dir'] = result['dir']

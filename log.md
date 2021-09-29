@@ -1,8 +1,14 @@
+0.0.7
+-----
+- flask GET/POST handles for blockchain and contract calls
+- dummy transactions and mining conditions
+
 0.0.6
 -----
 - created transaction class and first contract prototype
 - power-up controls for players
 - better ajax routine for navigation
+- additional pytests bringing code-coverage > 90%
 
 0.0.5
 -----

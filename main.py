@@ -5,7 +5,7 @@ from markdown import markdown
 from operator import itemgetter
 from pprint import pprint # for debug purposes..
 
-from app.configuration import BASE_TITLE, BLOCKCHAIN, DEBUG_MODE, LOGGER
+from app.configuration import BASE_TITLE, BLOCKCHAIN, CONTRACT, DEBUG_MODE, LOGGER
 from app.functions import decorate, render
 from app.gaming import update_status
 from app.simulation import NODES, PLAYERS, STATUS # initial conditions, auto-generated # TBD initialization controls
@@ -42,7 +42,7 @@ def changelog():
 
 @app.route('/report')
 def report():
-    return render('index.html', BASE_TITLE + " | Report") # TBD implement this
+    return render('index.html', BASE_TITLE + " | Report") # TBD implement this, frontend too..
 
 @app.errorhandler(404)
 def error_handler_404(error):
@@ -53,17 +53,43 @@ def log_get():
     LOGGER.log("flask log_get handle called")
     return json.dumps(LOGGER.get_log())
 
+@app.route('/blockchain/get')
+def blockchain_get():
+    LOGGER.log("flask blockchain_get handle called")
+    return json.dumps(BLOCKCHAIN.get_blockchain())
+
 @app.route('/blockchain/get/length')
 def blockchain_get_length():
     LOGGER.log("flask blockchain_get_length handle called")
     return json.dumps(len(BLOCKCHAIN.get_blockchain()))
 
+@app.route('/blockchain/add/transaction',
+    methods = ['GET', 'POST']
+)
+def blockchain_add_transaction():
+    data = request.get_json()
+    BLOCKCHAIN.add_transaction() # TBD
+    LOGGER.log("adding new transaction by node ''") # TBD
+    return True, 202
+
 @app.route('/contract/mine',
     methods = ['GET', 'POST']
 )
 def contract_mine():
-    LOGGER.log("request to mine from node ''") # TBD
-    return json.dumps() # TBD
+    data = request.get_json()
+    LOGGER.log("request to mine from node '" + data['node']['id'] + "' at address '" + data['node']['address'] + "'") # TBD
+    if CONTRACT.mine():
+        blockchain_length = len(BLOCKCHAIN.get_blockchain())
+        last_block = BLOCKCHAIN.get_last_block()
+        last_valid_hash = CONTRACT.proof_blockchain() # checking blockchain against consensus criteria
+        if blockchain_length == len(BLOCKCHAIN.get_blockchain()) \
+        and CONTRACT.proof_block(last_block, last_valid_hash):
+            for key in NODES:
+                NODES[key].append_block_to_blockchain(last_block)
+            for key in PLAYERS:
+                PLAYERS[key].append_block_to_blockchain(last_block)
+            LOGGER.log_ok("block number '" + str(last_block.get_index()) + "' was mined")
+    return True, 202
 
 @app.route('/node/get',
     defaults = {'id': None}

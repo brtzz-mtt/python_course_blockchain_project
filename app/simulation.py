@@ -9,7 +9,11 @@ from app.modules._blockchain.node import Node
 NODES = {}
 for i in range(100):
     account = Account.create((generate_md5_hash(str(i))))
-    node = Node('127.0.0.1:' + str(5001 + i), account, generate_md5_hash(str(i)))
+    node = Node('127.0.0.1:' + str(5001 + i),
+        account,
+        generate_md5_hash(str(i)),
+        BLOCKCHAIN # registering node for the blockchain
+    )
     node.get_account().set_tokens(0)#random.randint(5, 10)) # DBG
     NODES[node.get_id()] = node
 
@@ -38,7 +42,11 @@ players = (
 PLAYERS = {}
 for player in players:
     account = Player(player['name'], player['color'])
-    node = Node('127.0.0.1:' + str(5000 + len(NODES) + players.index(player)), account, player['name'])
+    node = Node('127.0.0.1:' + str(5000 + len(NODES) + players.index(player)),
+        account,
+        player['name'],
+        BLOCKCHAIN # registering player's node for the blockchain
+    )
     node.get_account().set_tokens(1)#random.randint(5, 10)) # DBG
     PLAYERS[node.get_id()] = node.get_account()
 
