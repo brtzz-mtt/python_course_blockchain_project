@@ -1,3 +1,5 @@
+import json
+
 from app.configuration import LOGGER
 from app.modules.common import Timestamped
 from app.modules.utility import generate_sha256_hash
@@ -47,3 +49,10 @@ class Block(Timestamped):
 
     def get_transactions(self) -> list:
         return self.__transactions
+
+    def to_json(self) -> str:
+        return json.dumps(self,
+            default = lambda o: o.__dict__, 
+            sort_keys = True,
+            indent = 4
+        )

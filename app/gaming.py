@@ -127,19 +127,20 @@ def update_status():
         STATUS[key]['pos_y'] = result['pos_y']
         STATUS[key]['dir'] = result['dir']
     for key in PLAYERS:
-        entropy = PLAYERS[key].get_entropy()
+        player_account = PLAYERS[key].get_account()
+        entropy = player_account.get_entropy()
         STATUS[key]['entropy'] = entropy
         if key == miner:
-            tokens = PLAYERS[key].add_tokens(process_mining(entropy))
+            tokens = player_account.add_tokens(process_mining(entropy))
             STATUS[key]['tokens'] = tokens
-        attack = PLAYERS[key].get_attack()
+        attack = player_account.get_attack()
         STATUS[key]['attack'] = attack
-        defence = PLAYERS[key].get_defence()
+        defence = player_account.get_defence()
         STATUS[key]['defence'] = defence
-        speed = PLAYERS[key].get_speed()
+        speed = player_account.get_speed()
         STATUS[key]['speed'] = speed
         result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], STATUS[key]['tokens'], entropy, speed)
         STATUS[key]['pos_x'] = result['pos_x']
         STATUS[key]['pos_y'] = result['pos_y']
         STATUS[key]['dir'] = result['dir']
-        process_behaviour(PLAYERS[key], STATUS[key]['auto_behaviour'])
+        process_behaviour(player_account, STATUS[key]['auto_behaviour'])

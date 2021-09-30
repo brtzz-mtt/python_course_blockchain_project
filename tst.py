@@ -51,8 +51,19 @@ def test_app():
     #except AttributeError:
     #    pass
 
+    with app.test_request_context(): # see https://stackoverflow.com/questions/17375340/testing-code-that-requires-a-flask-app-or-request-context
+        assert 'blockchain_add_transaction' in view_functions
+        result = blockchain_add_transaction() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+
+    assert 'blockchain_get' in view_functions
+    result = blockchain_get() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+
     assert 'blockchain_get_length' in view_functions
     result = blockchain_get_length() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+
+    with app.test_request_context(): # see https://stackoverflow.com/questions/17375340/testing-code-that-requires-a-flask-app-or-request-context
+        assert 'contract_mine' in view_functions
+        result = contract_mine() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
 
     assert 'log_get' in view_functions
     result = log_get() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context

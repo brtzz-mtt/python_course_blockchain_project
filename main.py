@@ -9,6 +9,7 @@ from app.configuration import BASE_TITLE, BLOCKCHAIN, CONTRACT, DEBUG_MODE, LOGG
 from app.functions import decorate, render
 from app.gaming import update_status
 from app.simulation import NODES, PLAYERS, STATUS # initial conditions, auto-generated # TBD initialization controls
+from app.modules._blockchain.transaction import Transaction
 
 app = Flask(__name__)
 
@@ -56,7 +57,7 @@ def log_get():
 @app.route('/blockchain/get')
 def blockchain_get():
     LOGGER.log("flask blockchain_get handle called")
-    return json.dumps(BLOCKCHAIN.get_blockchain())
+    return BLOCKCHAIN.get_blockchain_to_json()
 
 @app.route('/blockchain/get/length')
 def blockchain_get_length():
@@ -68,7 +69,8 @@ def blockchain_get_length():
 )
 def blockchain_add_transaction():
     data = request.get_json()
-    BLOCKCHAIN.add_transaction() # TBD
+    transaction = Transaction('dummy_sender_id', 'dummy_receiver_id', {'dummy': "payload"}) # DBG
+    BLOCKCHAIN.add_transaction(transaction) # TBD
     LOGGER.log("adding new transaction by node ''") # TBD
     return True, 202
 
@@ -77,7 +79,7 @@ def blockchain_add_transaction():
 )
 def contract_mine():
     data = request.get_json()
-    LOGGER.log("request to mine from node '" + data['node']['id'] + "' at address '" + data['node']['address'] + "'") # TBD
+    #LOGGER.log("request to mine from node '" + data['node']['id'] + "' at address '" + data['node']['address'] + "'") # TBD
     if CONTRACT.mine():
         blockchain_length = len(BLOCKCHAIN.get_blockchain())
         last_block = BLOCKCHAIN.get_last_block()
@@ -85,9 +87,9 @@ def contract_mine():
         if blockchain_length == len(BLOCKCHAIN.get_blockchain()) \
         and CONTRACT.proof_block(last_block, last_valid_hash):
             for key in NODES:
-                NODES[key].append_block_to_blockchain(last_block)
+                NODES[key].append_block_to_own_blockchain(last_block)
             for key in PLAYERS:
-                PLAYERS[key].append_block_to_blockchain(last_block)
+                PLAYERS[key].append_block_to_own_blockchain(last_block)
             LOGGER.log_ok("block number '" + str(last_block.get_index()) + "' was mined")
     return True, 202
 

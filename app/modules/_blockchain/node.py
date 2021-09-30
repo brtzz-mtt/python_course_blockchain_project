@@ -22,7 +22,7 @@ class Node(Timestamped):
         self.__blockchain_copy = blockchain.get_blockchain()
         LOGGER.log_ok("created node '" + self.__id + "' on address '" + self.__address + "' at " + self.get_timestamp())
 
-    def append_block_to_blockchain_copy(self,
+    def append_block_to_own_blockchain(self,
         block: Block
     ) -> None:
         if self.__blockchain_copy[-1].get_hash() == block.get_previous_hash():

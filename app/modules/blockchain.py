@@ -1,3 +1,5 @@
+import json
+
 from app.configuration import LOGGER
 from app.modules.common import Timestamped
 from app.modules._blockchain.block import Block
@@ -41,6 +43,12 @@ class Blockchain(Timestamped):
     def get_blockchain(self) -> list:
         return self.__blockchain
 
+    def get_blockchain_to_json(self):
+        blockchain = []
+        for i in range(len(self.__blockchain)):
+            blockchain.append(self.__blockchain[i].to_json())
+        return json.dumps(blockchain)
+
     def get_id(self) -> str:
         return self.__id
 
@@ -55,3 +63,8 @@ class Blockchain(Timestamped):
 
     def get_token_iso(self) -> str:
         return self.__id[0:3].upper()
+
+    def set_blockchain(self,
+        blockchain = list
+    ):
+        self.__blockchain = blockchain

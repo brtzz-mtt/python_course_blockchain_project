@@ -48,7 +48,7 @@ for player in players:
         BLOCKCHAIN # registering player's node for the blockchain
     )
     node.get_account().set_tokens(1)#random.randint(5, 10)) # DBG
-    PLAYERS[node.get_id()] = node.get_account()
+    PLAYERS[node.get_id()] = node
 
 DIRECTIONS = {
     'N': [0, -1],
@@ -86,17 +86,18 @@ for key in NODES:
         'token_iso': BLOCKCHAIN.get_token_iso()
     }
 for key in PLAYERS:
-    tokens = PLAYERS[key].get_tokens()
+    player_account = PLAYERS[key].get_account()
+    tokens = player_account.get_tokens()
     STATUS[key] = {
-        'color': PLAYERS[key].get_color(),
-        'entropy': PLAYERS[key].get_entropy(),
-        'attack': PLAYERS[key].get_attack(),
-        'defence': PLAYERS[key].get_defence(),
-        'speed': PLAYERS[key].get_speed(),
+        'color': player_account.get_color(),
+        'entropy': player_account.get_entropy(),
+        'attack': player_account.get_attack(),
+        'defence': player_account.get_defence(),
+        'speed': player_account.get_speed(),
         'pos_x': random.randint(0, 100 - tokens),
         'pos_y': random.randint(0, 100 - tokens),
         'dir': random.choice(DIRECTION_KEYS),
         'tokens': tokens,
         'token_iso': BLOCKCHAIN.get_token_iso(),
-        'auto_behaviour': PLAYERS[key].get_auto_behaviour()
+        'auto_behaviour': player_account.get_auto_behaviour()
     }

@@ -32,10 +32,11 @@ class Contract(Timestamped):
 
     def proof_blockchain(self) -> str:
         blockchain = self.__blockchain.get_blockchain()
-        for i in range(0, len(blockchain) - 1):
+        for i in range(len(blockchain) - 1):
             if blockchain[i].get_hash() != blockchain[i + 1].get_previous_hash():
                 break
-        self.self.__blockchain.set_blockchain(blockchain[0, i + 1])
+        if i:
+            self.__blockchain.set_blockchain(blockchain[0, i + 1])
         return self.__blockchain.get_last_block().get_hash()
 
     def proof_block(self,
