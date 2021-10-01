@@ -10,4 +10,4 @@ EvoCHAIN
 
 Requirements can be found in file ./req.txt, built automatically with [pipreqs](https://pypi.org/project/pipreqs/)
 
-Copyright © 2021 Bertozzi Matteo
+Copyright © 2021 Bertozzi Matteo (& Aurelian)

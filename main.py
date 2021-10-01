@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, request
+from flask import Flask, make_response, request
 from markdown import markdown
 from operator import itemgetter
 from pprint import pprint # for debug purposes..
@@ -121,7 +121,7 @@ def player_get(id = None):
     else:
         data = []
         for key in PLAYERS:
-            data.append(PLAYERS[key].get_data())
+            data.append(PLAYERS[key].get_account().get_data())
         return json.dumps(sorted(data,
             key = itemgetter('tokens'),
             reverse = True
@@ -130,8 +130,10 @@ def player_get(id = None):
 @app.route('/status/get')
 def status_get():
     LOGGER.log("flask status_get handle called")
-    update_status()
-    return json.dumps(STATUS)
+    response = make_response(json.dumps(update_status()))
+    response.mimetype = 'application/json'
+    return response
+    #return json.dumps(STATUS)
 
 if __name__ == '__main__':
     #pprint(vars(app)) # DBG

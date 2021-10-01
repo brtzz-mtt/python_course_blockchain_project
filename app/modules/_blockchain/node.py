@@ -28,7 +28,7 @@ class Node(Timestamped):
         if self.__blockchain_copy[-1].get_hash() == block.get_previous_hash():
             self.__blockchain_copy.append(block)
         elif self.__blockchain_copy[-1].get_hash() == block.get_hash():
-            self.__account.add_tokens(self.__blockchain.get_mining_reward())
+            self.__account.mod_tokens(self.__blockchain.get_mining_reward())
         else:
             LOGGER.log_warn("blockchain copy of node '" + self.__id + "' seems broken")
 

@@ -13,11 +13,6 @@ class Account(Timestamped):
         self.__tokens = 0 # balance is null at creation
         LOGGER.log_ok("created account '" + self.__id + "' at " + self.get_timestamp())
 
-    def add_tokens(self,
-        amount: float
-    ) -> float:
-        return self.set_tokens(self.__tokens + amount)
-
     @classmethod
     def create(cls, # default instance creator, checks if an accoutn with same id already exists in registry
         id: str
@@ -34,6 +29,11 @@ class Account(Timestamped):
 
     def get_tokens(self) -> float:
         return self.__tokens
+
+    def mod_tokens(self, # works with positive and negative values, returns result
+        amount: float
+    ) -> float:
+        return self.set_tokens(self.__tokens + amount)
 
     def set_tokens(self,
         amount: float

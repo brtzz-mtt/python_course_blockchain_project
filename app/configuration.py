@@ -1,6 +1,6 @@
 import os
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 BASE_PATH = os.path.dirname(__file__) + '/'
 

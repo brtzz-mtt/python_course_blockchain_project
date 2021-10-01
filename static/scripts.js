@@ -36,6 +36,8 @@ $(function()
     function update_aside_aside(response)
     {
         aside_aside.empty()
+        if (response.length <= 1)
+            button_pause_click()
         for (let i in response) {
             html = '<div class="content relative">'
                  + '    <span style="color:' + response[i].color + '">' + response[i].name + ' (' + response[i].auto_behaviour.toUpperCase() + ')</span>'
@@ -112,10 +114,10 @@ $(function()
             html = '<span class="node" style="'
                     + 'background-color:' + data.color + ';'
                     + 'box-shadow: 0 0 ' + data.tokens + 'px ' + data.color + ';'
-                    + 'height:' + data.tokens + '%;'
+                    + 'height:' + (data.tokens / 4) + '%;'
                     + 'left:' + data.pos_x + '%;'
                     + 'top:' + data.pos_y + '%;'
-                    + 'width:' + data.tokens + '%"'
+                    + 'width:' + (data.tokens / 4) + '%"'
                     + '>&nbsp;</span>'
             section_content.append(html)
         });
@@ -161,10 +163,10 @@ $(function()
     function bootstrap()
     {
         if (running) {
-            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 50);
-            interval_ajax_update_header_nav_blockchain_length = setInterval(ajax_update_header_nav_blockchain_length, delay);
+            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 10);
+            interval_ajax_update_header_nav_blockchain_length = setInterval(ajax_update_header_nav_blockchain_length, delay * 10);
             interval_ajax_update_section_content = setInterval(ajax_update_section_content, delay);
-            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 25);
+            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 10);
         } else {
             clearInterval(interval_ajax_update_aside_aside);
             clearInterval(interval_ajax_update_header_nav_blockchain_length);

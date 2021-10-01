@@ -7,7 +7,7 @@ from app.modules._blockchain.account import Account
 from app.modules._blockchain.node import Node
 
 NODES = {}
-for i in range(100):
+for i in range(60):
     account = Account.create((generate_md5_hash(str(i))))
     node = Node('127.0.0.1:' + str(5001 + i),
         account,
@@ -75,10 +75,10 @@ for key in NODES:
     tokens = NODES[key].get_account().get_tokens()
     STATUS[key] = {
         'color': "grey",
-        #'entropy': 0,
-        #'attack': 0,
-        #'defence': 0,
-        #'speed': 0,
+        'entropy': 0,
+        'attack': 0,
+        'defence': 0,
+        'speed': 0,
         'pos_x': random.randint(0, 100 - tokens),
         'pos_y': random.randint(0, 100 - tokens),
         'dir': random.choice(DIRECTION_KEYS),

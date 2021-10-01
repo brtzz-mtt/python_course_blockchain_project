@@ -1,3 +1,9 @@
+0.0.8
+-----
+- tuning of simulation interaction parameters
+- implementing proximity and attack/defence routines
+- debugging and testing up to 85% code-coverage
+
 0.0.7
 -----
 - flask GET/POST handles for blockchain and contract calls

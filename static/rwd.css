@@ -16,7 +16,7 @@
 
     header nav > span#copyright {
         /*display: none;*/
-        max-width: 33%;
+        max-width: 45%;
         text-align: center;
     }
 }
