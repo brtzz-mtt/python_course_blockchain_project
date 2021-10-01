@@ -2,14 +2,6 @@ import math, random
 
 from app.configuration import BLOCKCHAIN, CONTRACT
 from app.simulation import DIRECTIONS, DIRECTION_KEYS, NODES, PLAYERS, STATUS
-from app.modules._blockchain.transaction import Transaction
-
-def process_mining(entropy = 0):
-    BLOCKCHAIN.add_transaction(Transaction('dummy_sender_id', 'dummy_receiver_id', {'dummy': "payload"})) # DBG
-    if CONTRACT.mine():
-        mining_factor = entropy + 1
-        return mining_factor * BLOCKCHAIN.get_mining_reward() + random.randint(0, mining_factor) # random mining bonus
-    return 0
 
 def process_movement(
     pos_x,
@@ -47,9 +39,9 @@ def process_movement(
 
 def process_behaviour(player, behaviour):
         tokens = player.get_tokens()
-        power_up_attack_cost = player.get_attack() * 2
-        power_up_defence_cost = player.get_defence() * 2
-        power_up_speed_cost = player.get_speed() * 2
+        power_up_attack_cost = player.get_attack() * 1.6
+        power_up_defence_cost = player.get_defence() * 1.6
+        power_up_speed_cost = player.get_speed() * 1.6
         if behaviour == 'ads':
             if tokens >= power_up_attack_cost:
                 player.mod_tokens(-power_up_attack_cost)
@@ -125,43 +117,39 @@ def process_attacks():
                 if distance >= dist:
                     distance = dist
                     target_key = targets_key
-        amount = (STATUS[key]['attack'] - STATUS[target_key]['defence']) / 60
+        amount = (STATUS[key]['attack'] - STATUS[target_key]['defence']) / 60 + random.randint(0, 6) / 600
         if amount <= 0: # attack was unsuccessful
-            continue
+            continue #amount = random.randint(0, 6) / 12345
         if target_key in NODES:
              target = NODES[target_key]
         elif target_key in PLAYERS:
             target = PLAYERS[target_key]
         else:
             continue
-        target.get_account().mod_tokens(-amount)
-        if target.get_account().get_tokens() < 0: # target was killed
-            del STATUS[target_key]
-            if target_key in NODES:
-                del NODES[target_key]
-            elif target_key in PLAYERS:
-                del PLAYERS[target_key]
         if key in NODES:
              aggressor = NODES[key]
         elif key in PLAYERS:
             aggressor = PLAYERS[key]
         else:
             continue
-        aggressor.get_account().mod_tokens(amount)
+        CONTRACT.transfer_tokens(target.get_account(), aggressor.get_account(), amount)
+        if target.get_account().get_tokens() < 0: # target was killed
+            del STATUS[target_key]
+            if target_key in NODES:
+                del NODES[target_key]
+            elif target_key in PLAYERS:
+                del PLAYERS[target_key]
 
 def update_status():
     if len({**NODES, **PLAYERS}) == 1:
         return
     global STATUS
     miner = random.choice(list(NODES.keys()) + list(PLAYERS.keys())) # simulates mining conditions, quite superficially
-    #if not len(BLOCKCHAIN.get_blockchain()) % 10 and len(NODES): # ups.. c'ést la vie!
-    #    random_node = random.choice(list(NODES.keys()))
-    #    del NODES[random_node]
-    #    del STATUS[random_node]
     for key in NODES:
         if key == miner:
-            tokens = NODES[key].get_account().mod_tokens(process_mining())
-            STATUS[key]['tokens'] = tokens
+            actual_tokens = CONTRACT.assign_reward(NODES[key].get_account())
+            if actual_tokens:
+                STATUS[key]['tokens'] = actual_tokens
         result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], STATUS[key]['tokens'])
         STATUS[key]['pos_x'] = result['pos_x']
         STATUS[key]['pos_y'] = result['pos_y']
@@ -171,15 +159,16 @@ def update_status():
         entropy = player_account.get_entropy()
         STATUS[key]['entropy'] = entropy
         if key == miner:
-            tokens = player_account.mod_tokens(process_mining(entropy))
-            STATUS[key]['tokens'] = tokens
+            actual_tokens = CONTRACT.assign_reward(player_account, STATUS[key]['entropy'])
+            if actual_tokens:
+                STATUS[key]['tokens'] = actual_tokens
         attack = player_account.get_attack()
         STATUS[key]['attack'] = attack
         defence = player_account.get_defence()
         STATUS[key]['defence'] = defence
         speed = player_account.get_speed()
         STATUS[key]['speed'] = speed
-        result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], STATUS[key]['tokens'], entropy, speed)
+        result = process_movement(STATUS[key]['pos_x'], STATUS[key]['pos_y'], STATUS[key]['dir'], STATUS[key]['entropy'], entropy, speed) # STATUS[key]['entropy']
         STATUS[key]['pos_x'] = result['pos_x']
         STATUS[key]['pos_y'] = result['pos_y']
         STATUS[key]['dir'] = result['dir']

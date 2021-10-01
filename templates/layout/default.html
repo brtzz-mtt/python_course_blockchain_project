@@ -3,9 +3,9 @@
     {% include 'layout/head.html' %}
     <body {% if not debug %} class="animated" {% endif %}>
         {% if not debug %}
-            <video autoplay muted loop id="background">
+            <!--<video autoplay muted loop id="background">
                 <source src="{{ url_for('static', filename='images/background.mp4') }}" type="video/mp4" />
-            </video>
+            </video>-->
         {% endif %}
         <div class="grid height_full">
             <div id="aside" class="grid width_20 height_full">
@@ -48,8 +48,15 @@
                                     <button id="pause">
                                         PAUSE
                                     </button>
+                                    <button id="restart">
+                                        RESTART
+                                    </button>
                                 </span>
-                                <span style="text-align:right">&nbsp;Blockchain's length: <span id="blockchain_length">0</span></span>
+                                <span style="text-align:right">
+                                    &nbsp;
+                                    Blockchain's length: <span id="blockchain_length">0</span><br />
+                                    (transactions: <span id="total_transactions">0</span>)
+                                </span>
                             </nav>
                         </div>
                     </header>

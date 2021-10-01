@@ -1,11 +1,13 @@
 $(function()
 {
     var running = false,
-        delay = 100,
+        delay = 128,
         button_start = $('header nav .buttons button#start'),
         button_pause = $('header nav .buttons button#pause'),
+        button_restart = $('header nav .buttons button#restart'),
         aside_aside = $('#aside > aside'),
         header_nav_blockchain_length = $('header nav #blockchain_length'),
+        header_nav_total_transactions = $('header nav #total_transactions'),
         section_content = $('section#content'),
         footer_aside_content = $('footer > aside > div.content'),
         interval_ajax_update_aside_aside =
@@ -24,27 +26,37 @@ $(function()
     }
     button_start.on('click', button_start_click);
 
-    function button_pause_click()
+    function button_pause_click(then)
     {
         button_pause.hide();
-        button_start.show();
+        if (then == 'restart') {
+            button_restart.show();
+        } else {
+            button_start.show();
+        }
         running = false;
         bootstrap();
     }
     button_pause.on('click', button_pause_click);
 
+    function button_restart_click()
+    {
+        window.location.href = '/restart';
+    }
+    button_restart.on('click', button_restart_click);
+
     function update_aside_aside(response)
     {
         aside_aside.empty()
         if (response.length <= 1)
-            button_pause_click()
+            button_pause_click(); // button_pause_click('restart');
         for (let i in response) {
             html = '<div class="content relative">'
                  + '    <span style="color:' + response[i].color + '">' + response[i].name + ' (' + response[i].auto_behaviour.toUpperCase() + ')</span>'
                  + '    <span style="float:right">(' + response[i].tokens.toFixed(5) + ' ' + response[i].token_iso + ')</span>'
                  + '    <hr />'
                  + '    <span class="player" style="align-items:center;display:flex;font-size:.5em;justify-content:space-between">'
-                 + '        <span>Entropy: ' + response[i].entropy + '</span>'
+                 + '        <span><strong>Entropy: ' + response[i].entropy + '</strong></span>'
                  + '        <span>|</span>'
                  + '        <span>Attack: ' + response[i].attack
                  + '        ' + ((Math.pow(response[i].attack, 2) <= response[i].tokens)
@@ -77,6 +89,7 @@ $(function()
                          + '</div>';
                     aside_aside.append(html);
                 }
+                aside_aside.append('<div id="death_broom"></div>');
             }
         });
     }
@@ -101,7 +114,8 @@ $(function()
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                header_nav_blockchain_length.text(response)
+                header_nav_blockchain_length.text(response.blockchain_length)
+                header_nav_total_transactions.text(response.total_transactions)
             }
         });
     }
@@ -113,11 +127,11 @@ $(function()
         $.each(response, function(key, data) {
             html = '<span class="node" style="'
                     + 'background-color:' + data.color + ';'
-                    + 'box-shadow: 0 0 ' + data.tokens + 'px ' + data.color + ';'
-                    + 'height:' + (data.tokens / 4) + '%;'
+                    + 'box-shadow: 0 0 ' + (data.entropy + data.tokens) + 'px ' + data.color + ';'
+                    + 'height:' + (data.entropy + data.tokens / 4) + '%;'
                     + 'left:' + data.pos_x + '%;'
                     + 'top:' + data.pos_y + '%;'
-                    + 'width:' + (data.tokens / 4) + '%"'
+                    + 'width:' + (data.entropy + data.tokens / 4) + '%"'
                     + '>&nbsp;</span>'
             section_content.append(html)
         });
@@ -138,6 +152,7 @@ $(function()
 
     function update_footer_aside_content(response)
     {
+        footer_aside_content.empty()
         for (let i in response) {
             footer_aside_content.prepend(response[i] + '<br />').scrollTop(0)
         }
@@ -163,10 +178,10 @@ $(function()
     function bootstrap()
     {
         if (running) {
-            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 10);
-            interval_ajax_update_header_nav_blockchain_length = setInterval(ajax_update_header_nav_blockchain_length, delay * 10);
+            interval_ajax_update_aside_aside = setInterval(ajax_update_aside_aside, delay * 60);
+            interval_ajax_update_header_nav_blockchain_length = setInterval(ajax_update_header_nav_blockchain_length, delay);
             interval_ajax_update_section_content = setInterval(ajax_update_section_content, delay);
-            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 10);
+            interval_ajax_update_footer_aside_content = setInterval(ajax_update_footer_aside_content, delay * 6);
         } else {
             clearInterval(interval_ajax_update_aside_aside);
             clearInterval(interval_ajax_update_header_nav_blockchain_length);

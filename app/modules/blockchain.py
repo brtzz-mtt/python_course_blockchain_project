@@ -64,6 +64,12 @@ class Blockchain(Timestamped):
     def get_token_iso(self) -> str:
         return self.__id[0:3].upper()
 
+    def get_transactions_amount(self) -> list:
+        transactions = 0
+        for i in range(len(self.__blockchain)):
+            transactions += len(self.__blockchain[i].get_transactions())
+        return json.dumps(transactions)
+
     def set_blockchain(self,
         blockchain = list
     ):

@@ -17,6 +17,11 @@ app = Flask(__name__)
 def index():
     return render()
 
+@app.route('/restart') # DBG
+def restart():
+    #app.run(debug = DEBUG_MODE)
+    return render()
+
 @app.route('/license')
 def license():
     file = open('gpl.md', 'r')
@@ -62,7 +67,10 @@ def blockchain_get():
 @app.route('/blockchain/get/length')
 def blockchain_get_length():
     LOGGER.log("flask blockchain_get_length handle called")
-    return json.dumps(len(BLOCKCHAIN.get_blockchain()))
+    return json.dumps({
+        'blockchain_length': len(BLOCKCHAIN.get_blockchain()),
+        'total_transactions': BLOCKCHAIN.get_transactions_amount()
+    })
 
 @app.route('/blockchain/add/transaction',
     methods = ['GET', 'POST']
@@ -123,7 +131,7 @@ def player_get(id = None):
         for key in PLAYERS:
             data.append(PLAYERS[key].get_account().get_data())
         return json.dumps(sorted(data,
-            key = itemgetter('tokens'),
+            key = itemgetter('entropy'), # tokens
             reverse = True
         ))
 

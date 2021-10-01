@@ -16,7 +16,7 @@ body {
 }
 
 body.animated {
-    animation: animate_body_background 1s ease-in infinite alternate;
+    /*animation: animate_body_background 1s ease-in infinite alternate;*/
     background-attachment: fixed;
     background-image: url('images/background.png');
     background-position: top center;
@@ -79,6 +79,12 @@ header nav .buttons button#pause {
     display: none;
 }
 
+header nav .buttons button#restart {
+    background-color: orange;
+    color: white;
+    display: none;
+}
+
 #aside > aside .player a.power_up {
     background-color: forestgreen;
     border-radius: 4px;
@@ -134,7 +140,7 @@ div.content.relative.npc {
 
 section#content {
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: relative;
 }
 
@@ -158,4 +164,14 @@ footer > aside > div.content {
 
 footer:hover > aside > div.content {
     background-color: rgba(0, 0, 0, .75);
+}
+
+/* BONUS: the dreaded BROOM of DEATH */
+
+#death_broom {
+    background-image: url('images/broom.png');
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
 }

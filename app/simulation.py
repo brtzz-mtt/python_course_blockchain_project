@@ -79,14 +79,15 @@ for key in NODES:
         'attack': 0,
         'defence': 0,
         'speed': 0,
-        'pos_x': random.randint(0, 100 - tokens),
-        'pos_y': random.randint(0, 100 - tokens),
+        'pos_x': random.randint(0, 100), # - tokens
+        'pos_y': random.randint(0, 100), # - tokens
         'dir': random.choice(DIRECTION_KEYS),
         'tokens': tokens,
         'token_iso': BLOCKCHAIN.get_token_iso()
     }
 for key in PLAYERS:
     player_account = PLAYERS[key].get_account()
+    entropy = player_account.get_entropy()
     tokens = player_account.get_tokens()
     STATUS[key] = {
         'color': player_account.get_color(),
@@ -94,8 +95,8 @@ for key in PLAYERS:
         'attack': player_account.get_attack(),
         'defence': player_account.get_defence(),
         'speed': player_account.get_speed(),
-        'pos_x': random.randint(0, 100 - tokens),
-        'pos_y': random.randint(0, 100 - tokens),
+        'pos_x': random.randint(0, 100 - entropy), # - tokens
+        'pos_y': random.randint(0, 100 - entropy), # - tokens
         'dir': random.choice(DIRECTION_KEYS),
         'tokens': tokens,
         'token_iso': BLOCKCHAIN.get_token_iso(),

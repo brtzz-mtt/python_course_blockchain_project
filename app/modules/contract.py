@@ -1,7 +1,11 @@
+import random
+
 from app.configuration import LOGGER
 from app.modules.blockchain import Blockchain
 from app.modules.common import Timestamped
+from app.modules._blockchain.account import Account
 from app.modules._blockchain.block import Block
+from app.modules._blockchain.transaction import Transaction
 
 class Contract(Timestamped):
 
@@ -13,6 +17,18 @@ class Contract(Timestamped):
         self.__id = id
         self.__blockchain = blockchain
         LOGGER.log_ok("created contract '" + self.__id + "' at " + self.get_timestamp())
+
+    def assign_reward(self,
+        account: Account,
+        modifier: int = 0
+    ) -> float or False:
+        modifier =+ 1
+        mining_reward = modifier * self.__blockchain.get_mining_reward() + random.randint(0, modifier)
+        self.__blockchain.add_transaction(Transaction(None, account.get_id(), {'mod_tokens': mining_reward}))
+        if self.mine():
+            LOGGER.log_ok("account '" + account.get_id() + "' was rewarded with " + str(mining_reward) + " " + self.__blockchain.get_token_iso())
+            return account.mod_tokens(mining_reward)
+        return False
 
     def get_blockchain(self) -> Blockchain:
         return self.__blockchain
@@ -44,3 +60,16 @@ class Contract(Timestamped):
         hash: str
     ) -> bool:
         return hash == block.generate_hash()
+
+    def transfer_tokens(self,
+        sender_account: Account,
+        receiver_account: Account,
+        amount: float
+    ) -> bool:
+        if not amount:
+            return False
+        self.__blockchain.add_transaction(Transaction(sender_account.get_id(), receiver_account.get_id(), {'mod_tokens': amount}))
+        sender_account.mod_tokens(-amount)
+        receiver_account.mod_tokens(amount)
+        LOGGER.log_ok("an amount of " + str(amount) + " " + self.__blockchain.get_token_iso() + " was transfered from account '" + sender_account.get_id() + "' to account '" + receiver_account.get_id() + "'")
+        return True

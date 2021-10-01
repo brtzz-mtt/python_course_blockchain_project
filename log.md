@@ -1,3 +1,13 @@
+0.1.0
+-----
+- additional testing and code-coverage enhancing
+- tuning, debugging & packing test prototype
+
+0.0.9
+-----
+- blockchain transaction throught contract to reward node's mining success
+- end of simulation and restart functionality
+
 0.0.8
 -----
 - tuning of simulation interaction parameters

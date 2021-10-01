@@ -28,7 +28,7 @@ class Node(Timestamped):
         if self.__blockchain_copy[-1].get_hash() == block.get_previous_hash():
             self.__blockchain_copy.append(block)
         elif self.__blockchain_copy[-1].get_hash() == block.get_hash():
-            self.__account.mod_tokens(self.__blockchain.get_mining_reward())
+            LOGGER.log("blockchain copy already up-to-date with network latest")
         else:
             LOGGER.log_warn("blockchain copy of node '" + self.__id + "' seems broken")
 
