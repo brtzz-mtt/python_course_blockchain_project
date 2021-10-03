@@ -6,7 +6,7 @@ from operator import itemgetter
 from pprint import pprint # for debug purposes..
 
 from app.configuration import BASE_TITLE, BLOCKCHAIN, CONTRACT, DEBUG_MODE, LOGGER
-from app.functions import decorate, render
+from app.functions import render
 from app.gaming import update_status
 from app.simulation import NODES, PLAYERS, STATUS # initial conditions, auto-generated # TBD initialization controls
 from app.modules._blockchain.transaction import Transaction
@@ -15,7 +15,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render()
+    text = ''
+    index = 1
+    file = open('README.md', 'r')
+    with file as readme_file:
+        for line in readme_file:
+            if index > 10:
+                text += line + "\n"
+            index += 1
+    html = markdown(text)
+    file.close()
+    return render(args = {
+        'html': html
+    })
 
 @app.route('/restart') # DBG
 def restart():
@@ -26,12 +38,14 @@ def restart():
 def license():
     file = open('gpl.md', 'r')
     html = markdown(file.read())
+    file.close()
     return render('html.html', BASE_TITLE + " | License", {'html': html})
 
 @app.route('/readme')
 def readme():
     file = open('README.md', 'r')
     html = markdown(file.read())
+    file.close()
     return render('html.html', None, {'html': html})
 
 @app.route('/changelog')
@@ -44,6 +58,7 @@ def changelog():
 #def documentation():
 #    file = open('doc.md', 'r')
 #    html = markdown(file.read())
+#    file.close()
 #    return render('html.html', BASE_TITLE + " | Documentation", {'html': html})
 
 @app.route('/report')

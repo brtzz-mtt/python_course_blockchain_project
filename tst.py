@@ -1,8 +1,9 @@
 from app.configuration import * # including os..
+
 from main import * # see https://docs.pytest.org/en/6.2.x/contents.html too
 
 def test_cnf():
-    assert DEBUG_MODE
+    # assert DEBUG_MODE
     assert isinstance(DEBUG_MODE, (bool, int))
     assert BASE_PATH
     assert isinstance(BASE_PATH, str)
@@ -80,8 +81,9 @@ def test_app():
     except AttributeError:
         pass
 
-    assert 'status_get' in view_functions
-    result = status_get() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
+    with app.test_request_context(): # see https://stackoverflow.com/questions/17375340/testing-code-that-requires-a-flask-app-or-request-context
+        assert 'status_get' in view_functions
+        result = status_get() # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
 
     assert 'static' in view_functions
     
@@ -89,6 +91,8 @@ def test_app():
         result = error_handler_404(None) # TBD see https://stackoverflow.com/questions/23987564/test-flask-render-template-context
     except AttributeError:
         pass
+
+from app.functions import *
 
 def test_app_functions():
     assert decorate

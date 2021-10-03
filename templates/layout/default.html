@@ -11,12 +11,7 @@
             <div id="aside" class="grid width_20 height_full">
                 <aside>
                     <div class="content">
-                        <h2>
-                            Welcome to {{ title }}!
-                        </h2>
-                        <p>
-                            Press START button on top-right bar in order to begin the simulation (or to restart it after a pause..)
-                        </p>
+                        {{ args['html']|safe }}
                     </div>
                 </aside>
             </div>
